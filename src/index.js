@@ -6,7 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const firebaseConfig = {
-  axxxkey here,
+  axxxkeyhere,
 };
 
 firebase.initializeApp(firebaseConfig);
