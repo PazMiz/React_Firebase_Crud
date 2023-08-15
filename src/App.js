@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
 import './App.css';
 
-
 const firebaseConfig = {
-  akey
+  axxx,
 };
-
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const storage = firebase.storage();
 
 const App = () => {
   const [cars, setCars] = useState([]);
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
   const [color, setColor] = useState('');
+  const [photoFile, setPhotoFile] = useState(null); // Added state for photo file
 
   useEffect(() => {
     fetchCars();
@@ -38,10 +39,15 @@ const App = () => {
   const addCar = async (event) => {
     event.preventDefault();
     try {
-      await db.collection('Cars').add({
+      const carRef = db.collection('Cars').doc();
+      const photoRef = storage.ref(`car_photos/${carRef.id}`);
+      await photoRef.put(photoFile);
+
+      await carRef.set({
         model,
         year: parseInt(year),
         color,
+        photoUrl: await photoRef.getDownloadURL(),
       });
 
       console.log('Car added successfully!');
@@ -49,6 +55,7 @@ const App = () => {
       setModel('');
       setYear('');
       setColor('');
+      setPhotoFile(null); // Reset the photo file state
     } catch (error) {
       console.error('Error adding car:', error);
     }
@@ -65,23 +72,25 @@ const App = () => {
   };
 
   function updateCar(carId, model, year, color) {
-    db.collection("Cars").doc(carId).update({
-      model: model,
-      year: year,
-      color: color
-    })
-    .then(() => {
-      console.log("Car updated successfully!");
-    })
-    .catch((error) => {
-      console.error("Error updating car: ", error);
-    });
+    db.collection('Cars')
+      .doc(carId)
+      .update({
+        model: model,
+        year: year,
+        color: color,
+      })
+      .then(() => {
+        console.log('Car updated successfully!');
+      })
+      .catch((error) => {
+        console.error('Error updating car: ', error);
+      });
   }
 
   return (
     <div>
       <header>
-        <h1>Welcome to Paz Firebase Crud</h1>
+        <h1>Welcome to Paz Firebase CRUD</h1>
       </header>
 
       <main>
@@ -92,6 +101,7 @@ const App = () => {
           {cars.map((car) => (
             <div key={car.id} className="car-card">
               <h2>{car.model}</h2>
+              <img src={car.photoUrl} alt={`${car.model} Car`} />
               <p>Year: {car.year}</p>
               <p>Color: {car.color}</p>
               <button className="delete-button" onClick={() => deleteCar(car.id)}>
@@ -141,6 +151,15 @@ const App = () => {
             name="model"
             value={model}
             onChange={(e) => setModel(e.target.value)}
+            required
+          />
+
+          <label htmlFor="photo">Photo:</label>
+          <input
+            type="file"
+            id="photo"
+            accept="image/*"
+            onChange={(e) => setPhotoFile(e.target.files[0])}
             required
           />
 
