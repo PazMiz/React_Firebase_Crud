@@ -6,7 +6,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const firebaseConfig = {
-  axxxkeyhere,
+  apiKey: 'AIzaSyCclB-KX1UeGdH8rs2IJTqJ6k2HbA17oY4',
+  authDomain: 'pazpj-256be.firebaseapp.com',
+  projectId: 'pazpj-256be',
+  storageBucket: 'pazpj-256be.appspot.com',
+  messagingSenderId: '3944589911',
+  appId: '1:3944589911:web:65486b6a38add6a2271112',
+  measurementId: 'G-5G0YXNH5EP',
 };
 
 firebase.initializeApp(firebaseConfig);

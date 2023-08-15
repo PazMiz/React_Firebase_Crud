@@ -5,7 +5,13 @@ import 'firebase/compat/storage';
 import './App.css';
 
 const firebaseConfig = {
-  axxx,
+  apiKey: 'AIzaSyCclB-KX1UeGdH8rs2IJTqJ6k2HbA17oY4',
+  authDomain: 'pazpj-256be.firebaseapp.com',
+  projectId: 'pazpj-256be',
+  storageBucket: 'pazpj-256be.appspot.com',
+  messagingSenderId: '3944589911',
+  appId: '1:3944589911:web:65486b6a38add6a2271112',
+  measurementId: 'G-5G0YXNH5EP',
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -101,7 +107,7 @@ const App = () => {
           {cars.map((car) => (
             <div key={car.id} className="car-card">
               <h2>{car.model}</h2>
-              <img src={car.photoUrl} alt={`${car.model} Car`} />
+              <img src={car.photoUrl} alt={`${car.model} Car`} className="resized-image" /> {/* Apply the resized-image class */}
               <p>Year: {car.year}</p>
               <p>Color: {car.color}</p>
               <button className="delete-button" onClick={() => deleteCar(car.id)}>
